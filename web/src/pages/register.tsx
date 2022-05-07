@@ -11,37 +11,29 @@ import {
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { useMutation } from "urql";
+import { useRegisterMutation } from "../generated/graphql";
 
 interface registerProps {}
 
-const MUTATION_REGISTER = `
-mutation Register($username: String!, $password: String!) {
-  register(options:{username: $username, password: $password}) {
-    errors {
-      field
-      message
-    }
-    user {
-      id
-      createdAt
-      username
-    }
-  }
-}
-`
-
 export const Register: React.FC<registerProps> = ({}) => {
-  const [{}, register] = useMutation(MUTATION_REGISTER)
+  const [{}, register] = useRegisterMutation();
   return (
     <Wrapper variant="small">
       <Formik
         initialValues={{ username: "", password: "" }}
-        onSubmit={(values) => {
+        onSubmit={async (values, { setErrors }) => {
           console.log(values);
-          return register(values)
+          const response = await register(values);
+          if (response.data?.register?.errors) {
+            setErrors(
+              // switch to setStatus ?
+              { username: "Hello, world!" }
+            );
+          }
+          return response;
         }}
       >
-        {( values, handleChange) => (
+        {(values, handleChange) => (
           <Form>
             <InputField
               name="username"
@@ -56,7 +48,10 @@ export const Register: React.FC<registerProps> = ({}) => {
                 type="password"
               />
             </Box>
-            <Button mt={4} type="submit">Register</Button> {/* Cant figure out isSubmitting spinning wheel :(*/}
+            <Button mt={4} type="submit">
+              Register
+            </Button>{" "}
+            {/* Cant figure out isSubmitting spinning wheel :(*/}
           </Form>
         )}
       </Formik>

@@ -28,19 +28,24 @@ let RedisStore = require("connect-redis")(session);
 const { createClient } = require("redis");
 let redisClient = createClient({ legacyMode: true });
 redisClient.connect().catch(console.error);
+const cors_1 = __importDefault(require("cors"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield (0, typeorm_1.createConnection)({
-        type: 'postgres',
-        database: 'marinecreatures',
-        username: 'postgres',
-        password: 'postgres',
+        type: "postgres",
+        database: "marinecreatures",
+        username: "postgres",
+        password: "postgres",
         logging: !constants_1.__prod__,
         synchronize: true,
         entities: [Post_1.Post, User_1.User],
     });
     const app = (0, express_1.default)();
+    app.use((0, cors_1.default)({
+        origin: "http://localhost:3000",
+        credentials: true,
+    }));
     app.use(session({
-        name: 'qid',
+        name: "qid",
         store: new RedisStore({
             client: redisClient,
             disableTouch: true,
@@ -48,7 +53,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: "lax",
             secure: constants_1.__prod__,
         },
         secret: "lskadfnlksagnelnwestkglnl",
@@ -60,12 +65,19 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             resolvers: [hello_1.HelloResolver, post_1.PostResolver, user_1.UserResolver],
             validate: false,
         }),
-        context: ({ req, res }) => ({ manager: conn.manager, req, res }),
+        context: ({ req, res }) => ({
+            manager: conn.manager,
+            req,
+            res,
+        }),
     });
     yield apolloServer.start();
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({
+        app,
+        cors: false,
+    });
     app.listen(4000, () => {
-        console.log('server started on localhost:4000');
+        console.log("server started on localhost:4000");
     });
 });
 main();
