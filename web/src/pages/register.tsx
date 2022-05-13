@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
-import { useMutation } from "urql";
 import { useRegisterMutation } from "../generated/graphql";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface registerProps {}
 
@@ -22,13 +22,12 @@ export const Register: React.FC<registerProps> = ({}) => {
       <Formik
         initialValues={{ username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
-          console.log(values);
+          // console.log(values);
           const response = await register(values);
-          if (response.data?.register?.errors) {
-            setErrors(
-              // switch to setStatus ?
-              { username: "Hello, world!" }
-            );
+          if (response.data?.register.errors) {
+            console.log("ERROR OCCURED");
+            setErrors({username: "dummy stupid app"});
+            // setErrors(toErrorMap(response.data.register.errors));
           }
           return response;
         }}
