@@ -3,10 +3,6 @@ import { Form, Formik } from "formik";
 import {
   Box,
   Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
 } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";

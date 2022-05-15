@@ -45,4 +45,6 @@ yarn-error.log*
 !.yarn/cache
 #.pnp.*
 node_modules
+
+backend/.yarn/cache/*
 web/.next/cache/*

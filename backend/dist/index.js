@@ -29,6 +29,8 @@ const { createClient } = require("redis");
 let redisClient = createClient({ legacyMode: true });
 redisClient.connect().catch(console.error);
 const cors_1 = __importDefault(require("cors"));
+const graphql_upload_1 = require("graphql-upload");
+const fileUpload_1 = require("./resolvers/fileUpload");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -62,7 +64,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.HelloResolver, post_1.PostResolver, user_1.UserResolver],
+            resolvers: [hello_1.HelloResolver, post_1.PostResolver, user_1.UserResolver, fileUpload_1.FileUploadResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({
@@ -71,6 +73,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             res,
         }),
     });
+    app.use((0, graphql_upload_1.graphqlUploadExpress)({ maxFileSize: 10000000, maxFiles: 10 }));
     yield apolloServer.start();
     apolloServer.applyMiddleware({
         app,

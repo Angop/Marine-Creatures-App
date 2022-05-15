@@ -22,6 +22,8 @@ import cors from "cors";
 // import { createClient } from "redis";
 // import session from "express-session";
 // import connectRedis from 'connect-redis'; // From https://stackoverflow.com/questions/53201058/connect-redis-setup-in-typescript/53201135
+import {graphqlUploadExpress} from 'graphql-upload';
+import { FileUploadResolver } from "./resolvers/fileUpload";
 
 // video at 2:20:25
 
@@ -72,15 +74,18 @@ const main = async () => {
   // APOLLO MIDDLEWARE
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver],
+      resolvers: [HelloResolver, PostResolver, UserResolver, FileUploadResolver],
       validate: false,
     }),
     context: ({ req, res }: MyContext): MyContext => ({
       manager: conn.manager,
       req,
       res,
-    }),
+    }), // Note: should be disabling uploads but it doesnt work TODO
   });
+
+  // Middleware to enable file uploads
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   await apolloServer.start();
   apolloServer.applyMiddleware({
