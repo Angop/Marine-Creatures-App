@@ -7,10 +7,7 @@ type UploadFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   accepts: string;
 };
 
-export const UploadField: React.FC<UploadFieldProps> = ({
-  accepts,
-  ...props
-}) => {
+export const UploadField: React.FC<UploadFieldProps> = ({ accepts }) => {
   return (
     <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
       {({ getRootProps, getInputProps }) => (

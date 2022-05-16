@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type FieldError = {
@@ -26,6 +28,7 @@ export type Mutation = {
   createPost: Post;
   deletePost: Scalars['Boolean'];
   register: UserResponse;
+  singleUpload: Scalars['Boolean'];
   updatePost?: Maybe<Post>;
 };
 
@@ -42,6 +45,11 @@ export type MutationDeletePostArgs = {
 
 export type MutationRegisterArgs = {
   options: UsernamePasswordInput;
+};
+
+
+export type MutationSingleUploadArgs = {
+  image: Scalars['Upload'];
 };
 
 
@@ -96,6 +104,13 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
+export type FileUploadMutationVariables = Exact<{
+  image: Scalars['Upload'];
+}>;
+
+
+export type FileUploadMutation = { __typename?: 'Mutation', singleUpload: boolean };
+
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -105,6 +120,15 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, createdAt: string, username: string } | null } };
 
 
+export const FileUploadDocument = gql`
+    mutation FileUpload($image: Upload!) {
+  singleUpload(image: $image)
+}
+    `;
+
+export function useFileUploadMutation() {
+  return Urql.useMutation<FileUploadMutation, FileUploadMutationVariables>(FileUploadDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($username: String!, $password: String!) {
   register(options: {username: $username, password: $password}) {

@@ -37,7 +37,7 @@ let FileUploadResolver = class FileUploadResolver {
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
-    __param(0, (0, type_graphql_1.Arg)("file", () => graphql_upload_1.GraphQLUpload)),
+    __param(0, (0, type_graphql_1.Arg)("image", () => graphql_upload_1.GraphQLUpload)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)

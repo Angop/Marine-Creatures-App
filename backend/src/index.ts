@@ -49,6 +49,9 @@ const main = async () => {
     cors({ // Put cors on all routes
       origin: "http://localhost:3000",
       credentials: true,
+      // DEV VERSION for graphql playground TODO delete
+      // origin: "*",
+      // credentials: false,
     })
   );
 

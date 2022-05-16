@@ -6,7 +6,7 @@ import { finished } from "stream/promises";
 export class FileUploadResolver {
   @Mutation(() => Boolean)
   async singleUpload(
-    @Arg("file", () => GraphQLUpload) { createReadStream, filename }: FileUpload
+    @Arg("image", () => GraphQLUpload) { createReadStream, filename }: FileUpload
   ) {
     const out = require("fs").createWriteStream(`./temp/${filename}`);
     createReadStream().pipe(out);
