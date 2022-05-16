@@ -24,7 +24,7 @@ export const Model: React.FC<modelProps> = ({}) => {
         {(values, handleChange) => (
           <Form>
             <Box mt={4}>
-              <UploadField label="uploadfile" accepts="image/*" />
+              <UploadField values={values} name="image" label="image" accepts="image/*" />
             </Box>
             <Button mt={4} type="submit">
               Submit
