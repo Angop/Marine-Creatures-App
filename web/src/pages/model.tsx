@@ -15,10 +15,10 @@ export const Model: React.FC<modelProps> = ({}) => {
       <Formik
         initialValues={{ image: null }}
         onSubmit={async (values) => {
-          console.log("File uploaded");
-          console.log("values", values);
-          const response = await fileUpload(values);
-          return response;
+          // console.log("File uploaded");
+          // console.log("values", values);
+          // const response = await fileUpload(values);
+          // return response;
         }}
       >
         {(values, handleChange) => (
@@ -29,6 +29,7 @@ export const Model: React.FC<modelProps> = ({}) => {
             <Button mt={4} type="submit">
               Submit
             </Button>{" "}
+            <img src={values.image} alt="uploaded image" />
           </Form>
         )}
       </Formik>

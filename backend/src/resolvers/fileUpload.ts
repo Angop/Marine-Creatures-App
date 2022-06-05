@@ -9,6 +9,7 @@ export class FileUploadResolver {
     @Arg("image", () => GraphQLUpload) { createReadStream, filename }: FileUpload
   ) {
     const out = require("fs").createWriteStream(`./temp/${filename}`);
+    // run inference and save
     createReadStream().pipe(out);
     await finished(out);
     return true;
